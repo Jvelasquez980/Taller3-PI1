@@ -11,7 +11,7 @@ class Command(BaseCommand):
         # Construct the full path to the JSON file
         #Recuerde que la consola está ubicada en la carpeta DjangoProjectBase.
         #El path del archivo movie_descriptions con respecto a DjangoProjectBase sería la carpeta anterior
-        json_file_path = '../movie_descriptions.json' 
+        json_file_path = 'DjangoProjectBase\movie_descriptions.json' 
         
         # Load data from the JSON file
         with open(json_file_path, 'r') as file:
