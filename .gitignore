@@ -1,3 +1,4 @@
 /openAI.env
 /DjangoProjectBase2/*
 env/
+.env

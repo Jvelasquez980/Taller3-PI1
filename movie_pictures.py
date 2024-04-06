@@ -9,11 +9,10 @@ from io import BytesIO
 import numpy as np
 
 #Se lee del archivo .env la api key de openai
-_ = load_dotenv('openAI.env')
-client = OpenAI(
-    # This is the default and can be omitted
-    api_key='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',
-)
+load_dotenv()
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 #Se carga la lista de películas de movie_titles.json
 with open('movie_descriptions.json', 'r') as file:

@@ -9,11 +9,10 @@ from io import BytesIO
 
 from dotenv import load_dotenv, find_dotenv
 
-_ = load_dotenv('DjangoProjectBase\openAI.env')
-client = OpenAI(
-    # This is the default and can be omitted
-    api_key='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',
-)
+load_dotenv()
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 def fetch_image(url):
     response = requests.get(url)

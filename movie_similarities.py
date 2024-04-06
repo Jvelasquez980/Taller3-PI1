@@ -5,13 +5,12 @@ from openai import OpenAI
 #from openai.embeddings_utils import get_embedding, cosine_similarity
 import numpy as np
 
-_ = load_dotenv('openAI.env')
-client = OpenAI(
-    # This is the default and can be omitted
-    api_key='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',
-)
+load_dotenv()
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 
-with open('movie_descriptions.json', 'r') as file:
+client = OpenAI(api_key=OPENAI_API_KEY)
+
+with open('DjangoProjectBase\movie_descriptions.json', 'r') as file:
     file_content = file.read()
     movies = json.loads(file_content)
 
