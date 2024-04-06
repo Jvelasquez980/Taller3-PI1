@@ -2,12 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from .models import Movie
+import json
 
 import matplotlib.pyplot as plt
 import matplotlib
 import io
 import urllib, base64
-
+from .movie_recommendations import get_embedding, cosine_similarity
+import numpy as np
 def home(request):
     #return HttpResponse('<h1>Welcome to Home Page</h1>')
     #return render(request, 'home.html')
@@ -15,6 +17,31 @@ def home(request):
     searchTerm = request.GET.get('searchMovie') # GET se usa para solicitar recursos de un servidor
     if searchTerm:
         movies = Movie.objects.filter(title__icontains=searchTerm)
+        if not movies:
+            with open('D:\\U\\5 Semestre\\Proyecto int\\Taller 3\\Taller3-PI1\\DjangoProjectBase\\movie\\movie_descriptions_embeddings.json', 'r') as file:
+
+                file_content = file.read()
+                movies = json.loads(file_content)
+            emb = get_embedding(searchTerm)
+
+            sim = []
+
+            for i in range(len(movies)):
+                sim.append((movies[i]['title'], cosine_similarity(emb, movies[i]['embedding'])))
+
+            # Ordenar las películas por similitud descendente
+            sim_sorted = sorted(sim, key=lambda x: x[1], reverse=True)
+
+            # Seleccionar las mejores recomendaciones (por ejemplo, las tres más similares)
+            num_recommendations = 3 
+            recommendations = sim_sorted[:num_recommendations]
+
+            # Imprimir las recomendaciones
+            recommendation_titles = [recommendation[0] for recommendation in recommendations]
+
+            # Filtrar las películas de la base de datos según los títulos recomendados
+            movies = Movie.objects.filter(title__in=recommendation_titles)
+
     else:
         movies = Movie.objects.all()
     return render(request, 'home.html', {'searchTerm':searchTerm, 'movies':movies})
